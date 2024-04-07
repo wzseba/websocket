@@ -1,18 +1,16 @@
 const TicketsControl = require('../models/tickets');
 
-const ticket = new TicketsControl();
+const ticketControl = new TicketsControl();
 
 const socketController = socket => {
-  console.log('cliente conectado', socket.id);
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+  // Emito el ultimo ticket hacia el front
+  socket.emit('ultimo-ticket', ticketControl.ultimo);
 
-  socket.on('enviar-mensaje', (payload, cb) => {
-    const id = '123seba';
-    // if (!cb) return;
-    cb(id);
-    socket.broadcast.emit('enviar-mensaje', payload);
+  socket.on('siguente-ticket', (payload, callback) => {
+    const siguente = ticketControl.siguiente();
+    callback(siguente);
+
+    // Notificar que hay ticket pendiente
   });
 };
 
