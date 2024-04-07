@@ -136,7 +136,8 @@ dist
 # Serverless Webpack directories
 .webpack/
 
-# Optional stylelint cache
+# DB json
+db/tickets.json
 
 # SvelteKit build / generate output
 .svelte-kit
