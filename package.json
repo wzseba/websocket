@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "nodemonConfig": {
+    "ignore": ["**/db/**"]
+  },
   "scripts": {
     "start": "nodemon app.js"
   },
