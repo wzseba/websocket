@@ -25,7 +25,7 @@ class TicketsControl {
       ultimo: this.ultimo,
       hoy: this.hoy,
       tickets: this.tickets,
-      ultimos: this.ultimos4,
+      ultimos4: this.ultimos4,
     };
   }
 
@@ -70,10 +70,13 @@ class TicketsControl {
     this.ultimos4.unshift(ticket);
 
     // Validar que siempre sean 4 tickets
-    if (this.ultimos4 > 4) {
-      // Elimino el ultimo elemento
-      this.ultimos4.splice(-1, 1);
-    }
+    this.ultimos4.splice(4);
+
+    // Guardar
+    this.guardarDB();
+
+    // Retorno ticket que esta siendo atendido
+    return ticket;
   }
 }
 
