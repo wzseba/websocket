@@ -137,7 +137,7 @@ dist
 .webpack/
 
 # DB json
-
+db/tickets.json
 
 # SvelteKit build / generate output
 .svelte-kit
