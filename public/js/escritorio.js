@@ -2,6 +2,7 @@
 const lblEscritorio = document.querySelector('h1');
 const btnAtender = document.querySelector('button');
 const atendiendo = document.querySelector('small');
+const alerta = document.querySelector('.alert');
 const lblPendientes = document.querySelector('#lblPendientes');
 
 // Tomo parametro de la url actual
@@ -19,6 +20,9 @@ const escritorio = searchParams.get('escritorio');
 // Asignamos el escritorio al DOM
 lblEscritorio.innerText = escritorio.replace('e', 'E');
 
+// Ocultamos informacion de alerta
+alerta.style.display = 'none';
+
 const socket = io();
 
 socket.on('connect', () => {
@@ -30,12 +34,15 @@ socket.on('disconnect', () => {
 });
 
 // Recibo desde el server el ultimo ticket
-socket.on('escritorio-actual', ultimo => {
+socket.on('ultimo-ticket', ultimo => {
   atendiendo.innerText = 'Ticket ' + ultimo;
 });
 
 btnAtender.addEventListener('click', () => {
-  //   socket.emit('siguente-ticket', null, ticket => {
-  //     lblNuevoTicket.innerText = ticket;
-  //   });
+  socket.emit('atender-ticket', { escritorio }, ({ ok, ticket }) => {
+    if (!ok) return (alerta.style.display = '');
+
+    // Si no hay error significa que tengo un ticket
+    atendiendo.innerText = 'Ticket ' + ticket.numero;
+  });
 });
