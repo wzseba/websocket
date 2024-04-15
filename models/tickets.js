@@ -64,7 +64,7 @@ class TicketsControl {
     const ticket = this.tickets.shift();
 
     // Asigno el escritorio al ticket
-    ticket.escritorio = escritorio;
+    ticket.escritorio = escritorio.replace('e', 'E');
 
     // Agrego el ticket al arreglo de 4 elementos que son los que se muestran en pantalla
     this.ultimos4.unshift(ticket);
