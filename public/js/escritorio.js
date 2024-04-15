@@ -4,6 +4,7 @@ const btnAtender = document.querySelector('button');
 const atendiendo = document.querySelector('small');
 const alerta = document.querySelector('.alert');
 const lblPendientes = document.querySelector('#lblPendientes');
+const mensajeEnCola = document.querySelector('span');
 
 // Tomo parametro de la url actual
 const searchParams = new URLSearchParams(window.location.search);
@@ -33,15 +34,23 @@ socket.on('disconnect', () => {
   btnAtender.disabled = true;
 });
 
-// Recibo desde el server el ultimo ticket
-socket.on('ultimo-ticket', ultimo => {
-  atendiendo.innerText = 'Ticket ' + ultimo;
+// Recibo desde el server la cantidad de tickets pendientes
+socket.on('tickets-pendientes', pendientes => {
+  if (pendientes === 0) {
+    lblPendientes.style.display = 'none';
+  } else {
+    lblPendientes.style.display = '';
+    lblPendientes.innerText = pendientes;
+  }
 });
 
 btnAtender.addEventListener('click', () => {
-  socket.emit('atender-ticket', { escritorio }, ({ ok, ticket }) => {
-    if (!ok) return (alerta.style.display = '');
-
+  socket.emit('atender-ticket', { escritorio }, ({ ok, msg, ticket }) => {
+    if (!ok) {
+      atendiendo.innerText = 'Ninguno';
+      mensajeEnCola.innerText = msg;
+      return (alerta.style.display = '');
+    }
     // Si no hay error significa que tengo un ticket
     atendiendo.innerText = 'Ticket ' + ticket.numero;
   });
