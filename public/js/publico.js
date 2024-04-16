@@ -12,6 +12,15 @@ const socket = io();
 
 // Recibo desde el server
 socket.on('estado-actual', payload => {
+  socket.on('tickets-pendientes', pendientes => {
+    // Revisar cuando llega a cero manejo de error
+    if (pendientes === 0) {
+      audio.pause();
+    }
+  });
+  const audio = new Audio('./audio/new-ticket.mp3');
+  audio.play();
+
   const [ticket1, ticket2, ticket3, ticket4] = payload;
 
   if (ticket1) {
@@ -26,7 +35,7 @@ socket.on('estado-actual', payload => {
 
   if (ticket3) {
     lblTicket3.innerText = 'Ticket ' + ticket3.numero;
-    lblEscritorio3.innerText = 'Ticket ' + ticket3.escritorio;
+    lblEscritorio3.innerText = ticket3.escritorio;
   }
 
   if (ticket4) {
